@@ -5,6 +5,7 @@
 ---
 
 ## 📖 目录
+
 1. [快速开始](#快速开始)
 2. [项目概览](#项目概览)
 3. [功能特性](#功能特性)
@@ -18,6 +19,28 @@
 
 ## 快速开始
 
+### 密钥与本地配置（必须先完成）
+
+本项目**不会**在源码中硬编码任何密钥，所有敏感信息通过**本地私有文件**或环境变量注入。
+
+**推荐做法（本地私有文件）：**
+
+1. 复制模板：
+
+- 将 [crypto_data_system/local_secrets.example.json](crypto_data_system/local_secrets.example.json) 复制为 **crypto_data_system/local_secrets.json**
+
+2. 填入你的密钥（仅保存在本机，不要提交到 Git）
+
+**可选做法（环境变量）：**
+在系统环境变量中设置：
+
+- `DUNE_API_KEY`
+- `THEGRAPH_API_KEY` / `THEGRAPH_API_TOKEN`
+- `ETHERSCAN_API_KEY`
+- `X_API_KEY` / `X_API_KEY_SECRET`
+
+> 说明：程序启动时会自动读取本地私有文件或环境变量（优先本地私有文件），确保不会把密钥写进仓库。
+
 ### 启动 Web 应用（3 步）
 
 ```bash
@@ -30,6 +53,51 @@ python run_web.py
 # 3. 打开浏览器访问
 # http://localhost:5000
 ```
+
+---
+
+## 安全与发布前检查（重要）
+
+### ✅ secrets 扫描结果（2026-02-02）
+
+已对以下类型文件进行严格扫描（含 **/*.md、脚本参数、前端文件 token 字段等）：
+
+- `**/*.{py,ps1,sh,bash,cmd,bat,js,ts,jsx,tsx,html,md,json,yml,yaml,toml,ini,txt}`
+- 检测规则包含常见密钥模式（GitHub/Slack/AWS/JWT/Google 等）与 `token/Authorization` 字段
+
+**扫描发现：**
+
+1. 真实密钥仅存在于：
+
+- `crypto_data_system/local_secrets.json`（本地私有文件，已被 .gitignore 忽略）
+
+2. 前端 `token` 字段仅为业务字段名：
+
+- [web_static/app_new.js](web_static/app_new.js) 中 `token: 'onchain-token-addresses'` 为正常字符串
+
+3. 脚本中密钥提示已使用占位符：
+
+- [run_cmds.ps1](run_cmds.ps1) 仅出现 `YOUR_KEY_HERE`
+
+**结论：**
+仓库当前无可提交的真实密钥，风险项仅为本地私有文件（已忽略）。
+
+### ✅ 数据/缓存未被上传
+
+已检查 Git 跟踪文件列表，未发现 `data/`、`data_manager_storage/`、`logs/`、`models/`、`machine_learning/outputs/` 等目录被提交。
+
+### 建议发布前自检清单
+
+1. `git status --porcelain` 必须为空
+2. 确认 `crypto_data_system/local_secrets.json` **未被跟踪**
+3. 确认以下目录均在 `.gitignore` 中：
+
+- `data/`
+- `data_manager_storage/`
+- `logs/`
+- `models/`
+- `machine_learning/outputs/`
+- `*.parquet / *.pkl / *.zip`
 
 ### Python 快速示例
 
@@ -95,6 +163,7 @@ manager.fetch_all_ohlcv('1h')
 ### 🌐 Web UI（4 个选项卡）
 
 #### 📥 数据获取
+
 - 交易所和市场类型选择
 - 智能交易对搜索（支持模糊匹配）
 - 日期范围选择（预设或自定义）
@@ -103,18 +172,21 @@ manager.fetch_all_ohlcv('1h')
 - 实时结果展示和统计
 
 #### 📊 数据可视化
+
 - 价格走势图（Chart.js）
 - 成交量分析
 - 多交易对对比
 - 技术指标支持
 
 #### 💾 数据管理
+
 - 自动数据保存
 - CSV 导出功能
 - 存储空间监控
 - 批量操作支持
 
 #### 🖥️ 系统监控
+
 - 实时系统状态
 - 缓存使用情况
 - 运行日志查看
@@ -123,6 +195,7 @@ manager.fetch_all_ohlcv('1h')
 ### 💻 Python API
 
 #### Fetcher（获取器）
+
 ```python
 fetcher = create_fetcher('binance', 'spot')
 
@@ -141,6 +214,7 @@ fetcher.fetch_market_snapshot(symbol='BTC/USDT', timeframe='1h')
 ```
 
 #### DataManager（数据管理器）
+
 ```python
 manager = create_data_manager('spot')
 
@@ -261,34 +335,41 @@ manager.get_cache_info()
 #### 1️⃣ 数据获取选项卡
 
 **步骤 1: 选择交易所和市场**
+
 - 从下拉菜单选择交易所（Binance、OKX 等）
 - 选择市场类型（现货、永续、期货等）
 
 **步骤 2: 搜索交易对**
+
 - 在搜索框输入交易对（如 BTC、USDT）
 - 支持模糊搜索
 - 点击结果添加到购物车
 
 **步骤 3: 设置时间范围**
+
 - 使用日期选择器选择开始和结束日期
 - 或使用预设（最近7天、30天等）
 
 **步骤 4: 配置参数**
+
 - 选择时间框架（1m、5m、1h、1d）
 - 设置数据限制数量
 
 **步骤 5: 获取数据**
+
 - 点击"获取数据"按钮
 - 查看结果统计和数据表
 
 #### 2️⃣ 数据管理选项卡
 
 **保存数据**
+
 - 选择市场和交易对
 - 点击"保存数据"
 - 系统自动保存到存储目录
 
 **导出数据**
+
 - 选择已保存的数据
 - 点击"导出为 CSV"
 - 下载文件到本地
@@ -296,11 +377,13 @@ manager.get_cache_info()
 #### 3️⃣ 系统监控选项卡
 
 **查看系统状态**
+
 - 活跃 Fetcher 实例数
 - 活跃 Manager 实例数
 - 系统版本和运行状态
 
 **查看日志**
+
 - 实时日志显示
 - 不同颜色区分日志级别
 - 支持日志搜索和过滤
@@ -575,6 +658,7 @@ web3quant/
 #### Q: Web 应用无法启动
 
 **A:** 检查以下几点：
+
 ```bash
 # 1. 确认 Flask 已安装
 pip install flask flask-cors
@@ -592,6 +676,7 @@ python health_check.py
 #### Q: 获取数据失败
 
 **A:** 常见原因和解决方案：
+
 ```python
 # 1. 检查交易所和市场是否支持
 from crypto_data_system import create_fetcher
@@ -609,6 +694,7 @@ cache.clear_all()
 #### Q: 如何清理旧数据
 
 **A:** 使用数据管理器清理：
+
 ```python
 from crypto_data_system import create_data_manager
 manager = create_data_manager('spot')
@@ -621,6 +707,7 @@ manager.clear_cache()
 #### Q: 如何导出数据
 
 **A:** 使用 Web UI 或 Python API：
+
 ```python
 # 方法 1: 使用 Web UI
 # → 数据管理 选项卡 → 选择数据 → 导出为 CSV
@@ -638,6 +725,7 @@ df.to_csv('btc_data.csv', index=False)
 ### 调试技巧
 
 #### 启用详细日志
+
 ```python
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -648,6 +736,7 @@ fetcher = create_fetcher('binance', 'spot')
 ```
 
 #### 检查系统状态
+
 ```bash
 # Web UI 中查看
 # → 系统监控 选项卡 → 查看实时状态和日志
@@ -657,6 +746,7 @@ python health_check.py
 ```
 
 #### 验证 API 连接
+
 ```python
 from crypto_data_system import create_fetcher
 
@@ -675,6 +765,7 @@ except Exception as e:
 ## 支持的交易所
 
 ### 现货市场（✅ 100% 支持）
+
 - Binance
 - OKX
 - Bybit
@@ -687,6 +778,7 @@ except Exception as e:
 - Coinbase
 
 ### 其他市场（⚠️ 需配置）
+
 - 永续合约 (Swap)
 - 期货 (Future)
 - 期权 (Option)
@@ -699,6 +791,7 @@ except Exception as e:
 ## 技术栈
 
 ### 后端
+
 - **框架**: Flask 2.0+
 - **API 交互**: CCXT（加密交易所库）
 - **区块链**: Web3.py（以太坊 / Polygon）
@@ -706,12 +799,14 @@ except Exception as e:
 - **缓存**: 内存 + 磁盘双层缓存
 
 ### 前端
+
 - **框架**: Bootstrap 5
 - **图表**: Chart.js
 - **时间选择**: DateRangePickr
 - **构建**: 原生 HTML/CSS/JavaScript
 
 ### 数据存储
+
 - **格式**: JSON、CSV、Pickle、Parquet
 - **本地目录**:
   - `data/cache/` - 临时缓存
