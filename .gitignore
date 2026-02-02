@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+*.pkl
+*.pkl.gz
+*.parquet
+
+# Data / Artifacts (DO NOT COMMIT)
+data/
+data_manager_storage/
+exports/
+models/
+machine_learning/outputs/
+logs/
+*.zip
+
+# Local secrets (DO NOT COMMIT)
+crypto_data_system/local_secrets.json
+**/.env
+**/.env.*
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/

@@ -1,0 +1,3198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密货币数据系统 - 完整版</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.1/daterangepicker.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #0891b2;
+            --success-color: #059669;
+            --danger-color: #dc2626;
+            --warning-color: #d97706;
+            --info-color: #0284c7;
+            --dark-color: #1f2937;
+            --light-color: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            transition: color 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        /* 顶部导航栏中的模块切换 */
+        .navbar .module-nav .nav-link {
+            background: transparent;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            line-height: 1.2;
+            cursor: pointer;
+        }
+
+        .navbar .module-nav .nav-link.active {
+            color: white !important;
+            font-weight: 700;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .container-main {
+            padding: 2rem 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            background: white;
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+            border: none;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-group-compact {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-group-compact .btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info-color);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #0369a1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #b45309;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+            color: white;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            padding: 2rem;
+        }
+
+        .tab-pane {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tabs {
+            border: none;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .nav-tabs .nav-link {
+            color: #6b7280;
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: transparent;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #cffafe;
+            color: #164e63;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner-border {
+            color: var(--primary-color);
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .data-table table {
+            margin: 0;
+            border: none;
+        }
+
+        .data-table thead {
+            background: #f3f4f6;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .data-table th {
+            color: #374151;
+            font-weight: 600;
+            padding: 1.25rem;
+            border: none;
+        }
+
+        .data-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.online {
+            background: #10b981;
+        }
+
+        .status-indicator.offline {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .alert {
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert-info {
+            background: #cffafe;
+            color: #164e63;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .form-group-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-result {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-result:hover {
+            background: #f3f4f6;
+        }
+
+        .search-result.active {
+            background: #dbeafe;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .selected-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .item-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #dbeafe;
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .item-tag .close-btn {
+            cursor: pointer;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .item-tag .close-btn:hover {
+            color: var(--danger-color);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .info-box-text {
+            color: #075985;
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .data-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        .filter-panel {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .control-group-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group-title i {
+            color: var(--primary-color);
+        }
+
+        .select-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            flex-wrap: wrap;
+        }
+
+        .daterangepicker {
+            border-radius: 8px !important;
+        }
+
+        .daterangepicker.show-calendar .drp-calendar {
+            display: block;
+        }
+
+        #alert-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+        }
+
+        .modal-title {
+            font-weight: 700;
+        }
+
+        .close {
+            color: white;
+        }
+
+        /* Sidebar & Layout Fixes */
+        .sidebar .nav-link {
+            color: #4b5563;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .sidebar .nav-link.active {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        /* Auto-complete z-index fix */
+        datalist {
+            position: absolute;
+            z-index: 1000;
+        }
+
+        /* Module containers */
+        .module-section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-group-row>div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .small {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        /* ===== 券商风格终端视图 ===== */
+        .broker-toggle .form-check-input {
+            cursor: pointer;
+        }
+
+        .broker-terminal {
+            border-radius: 12px;
+        }
+
+        .broker-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #ffffff;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .broker-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .symbol-badge {
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #0c4a6e;
+        }
+
+        .kv {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .kv-label {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .kv-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .price-up {
+            color: #16a34a !important;
+        }
+
+        .price-down {
+            color: #dc2626 !important;
+        }
+
+        .broker-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr 320px;
+            gap: 0.75rem;
+        }
+
+        .broker-panel {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .broker-panel-header {
+            padding: 0.6rem 0.85rem;
+            background: #f8fafc;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .broker-panel-body {
+            padding: 0.75rem;
+        }
+
+        .broker-subtitle {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #475569;
+            margin: 0.5rem 0;
+        }
+
+        .broker-table .table {
+            font-size: 0.82rem;
+            margin-bottom: 0;
+        }
+
+        .broker-table .table thead th {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .broker-section+.broker-section {
+            margin-top: 1rem;
+        }
+
+        .broker-order-actions .btn {
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .broker-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== 券商暗色模式 ===== */
+        body.broker-mode {
+            background: #0b1220;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .navbar,
+        body.broker-mode .sidebar {
+            background: #0f172a !important;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .sidebar .nav-link {
+            color: #cbd5e1 !important;
+        }
+
+        body.broker-mode .sidebar .nav-link.active {
+            background: #1e293b !important;
+            color: #ffffff !important;
+        }
+
+        body.broker-mode .card,
+        body.broker-mode .broker-panel,
+        body.broker-mode .broker-toolbar {
+            background: #0f172a;
+            border-color: #1f2a44;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .card-header,
+        body.broker-mode .broker-panel-header {
+            background: #111827;
+            color: #e2e8f0;
+            border-color: #1f2a44;
+        }
+
+        body.broker-mode .form-control,
+        body.broker-mode .form-select {
+            background: #0b1220;
+            border-color: #1f2a44;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .kv-label {
+            color: #94a3b8;
+        }
+
+        body.broker-mode .kv-value {
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .broker-panel-body,
+        body.broker-mode .broker-table .table {
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .chart-container {
+            background: #0b1220 !important;
+        }
+
+        body.broker-mode .chart-container .text-muted {
+            color: #94a3b8 !important;
+        }
+
+        body.broker-mode .form-label,
+        body.broker-mode .section-title {
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .text-muted,
+        body.broker-mode .small,
+        body.broker-mode .form-text {
+            color: #94a3b8 !important;
+        }
+
+        body.broker-mode .info-box {
+            background: #0b1220;
+            border: 1px solid #1f2a44;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .form-control::placeholder,
+        body.broker-mode .form-select::placeholder {
+            color: #64748b;
+        }
+
+        body.broker-mode .input-group-text {
+            background: #111827;
+            border-color: #1f2a44;
+            color: #cbd5e1;
+        }
+
+        body.broker-mode .btn-outline-secondary {
+            color: #e2e8f0;
+            border-color: #334155;
+        }
+
+        body.broker-mode .btn-outline-secondary:hover {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        body.broker-mode #symbol-list-container {
+            background: #0b1220 !important;
+            border-color: #1f2a44 !important;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode #symbol-list-container div {
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .table-light {
+            --bs-table-bg: #111827;
+            --bs-table-striped-bg: #0f172a;
+            --bs-table-striped-color: #e2e8f0;
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .card,
+        body.broker-mode .module-section,
+        body.broker-mode .tab-pane,
+        body.broker-mode .section-title,
+        body.broker-mode .form-label,
+        body.broker-mode .form-check-label,
+        body.broker-mode .info-box-text,
+        body.broker-mode .stat-card,
+        body.broker-mode .stat-label,
+        body.broker-mode .stat-value,
+        body.broker-mode .table,
+        body.broker-mode .table th,
+        body.broker-mode .table td,
+        body.broker-mode .list-group-item,
+        body.broker-mode .alert,
+        body.broker-mode .badge {
+            color: #e2e8f0;
+        }
+
+        body.broker-mode .card-body,
+        body.broker-mode .card-header,
+        body.broker-mode .nav-link,
+        body.broker-mode .text-body,
+        body.broker-mode .text-dark {
+            color: #e2e8f0 !important;
+        }
+
+        body.broker-mode .text-muted,
+        body.broker-mode .small,
+        body.broker-mode .form-text,
+        body.broker-mode .table-secondary {
+            color: #94a3b8 !important;
+        }
+
+        body.broker-mode a,
+        body.broker-mode .link-primary {
+            color: #7dd3fc !important;
+        }
+
+        body.broker-mode a:hover {
+            color: #bae6fd !important;
+        }
+
+        body.broker-mode .selected-items,
+        body.broker-mode .info-box,
+        body.broker-mode .table-responsive {
+            background: #0b1220;
+            border-color: #1f2a44;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <nav class="navbar navbar-dark mb-0"
+        style="background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%); z-index: 1030;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#"><i class="fas fa-chart-line me-2"></i>加密货币数据系统</a>
+            <div class="d-flex align-items-center text-white">
+                <div class="form-check form-switch text-white me-3 broker-toggle">
+                    <input class="form-check-input" type="checkbox" id="toggle-broker-mode">
+                    <label class="form-check-label" for="toggle-broker-mode">券商模式</label>
+                </div>
+                <span class="me-3"><i class="fas fa-clock me-1"></i> <span id="system-time">--:--:--</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="text-center">
+            <div class="spinner-border text-white" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="text-white mt-3">正在处理数据...</p>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏导航 -->
+            <div class="col-md-2 d-none d-md-block bg-white sidebar py-4 border-end"
+                style="min-height: calc(100vh - 60px);">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active mb-3 text-start py-3 px-4" id="data-fetch-tab" data-bs-toggle="pill"
+                        data-bs-target="#data-fetch" type="button" role="tab">
+                        <i class="fas fa-cloud-download-alt me-3 fa-lg"></i> 数据获取
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="data-analysis-tab" data-bs-toggle="pill"
+                        data-bs-target="#data-analysis" type="button" role="tab">
+                        <i class="fas fa-chart-line me-3 fa-lg"></i> 市场分析
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="onchain-dashboard-tab" data-bs-toggle="pill"
+                        data-bs-target="#onchain-dashboard" type="button" role="tab">
+                        <i class="fas fa-link me-3 fa-lg"></i> 链上看板
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="data-manage-tab" data-bs-toggle="pill"
+                        data-bs-target="#data-manage" type="button" role="tab">
+                        <i class="fas fa-database me-3 fa-lg"></i> 数据管理
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="alphagen-tab" data-bs-toggle="pill"
+                        data-bs-target="#alphagen" type="button" role="tab">
+                        <i class="fas fa-robot me-3 fa-lg"></i> AlphaGen/RL
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="ml-research-tab" data-bs-toggle="pill"
+                        data-bs-target="#ml-research" type="button" role="tab">
+                        <i class="fas fa-brain me-3 fa-lg"></i> 机器学习研究
+                    </button>
+                    <button class="nav-link mb-3 text-start py-3 px-4" id="system-monitor-tab" data-bs-toggle="pill"
+                        data-bs-target="#system-monitor" type="button" role="tab">
+                        <i class="fas fa-server me-3 fa-lg"></i> 系统监控
+                    </button>
+                </div>
+
+                <div class="mt-5 px-4 text-muted small">
+                    <p>状态: <span id="connection-status" class="badge bg-success">正常</span></p>
+                </div>
+            </div>
+
+            <!-- 主内容区域 -->
+            <div class="col-md-10 bg-light p-4" style="height: calc(100vh - 60px); overflow-y: auto;">
+                <div id="alert-container"></div>
+                <!-- 标签页内容 -->
+                <div class="tab-content">
+                    <!-- 标签页 1: 数据获取 -->
+                    <div class="tab-pane fade show active" id="data-fetch">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-cog"></i> 数据获取配置
+                            </div>
+                            <div class="card-body">
+                                <div class="section-title">模板与预设</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-template-select">Dune 模板</label>
+                                            <select class="form-select" id="onchain-template-select">
+                                                <option value="">请选择模板</option>
+                                                <option value="exchange_flow">资金流（交易所流入/流出）</option>
+                                                <option value="address_behavior">地址行为（活跃/新增/留存）</option>
+                                                <option value="large_moves">大额异动（转账/集中度）</option>
+                                                <option value="mev">MEV（sandwich/arb）</option>
+                                                <option value="gas">Gas 维度</option>
+                                                <option value="protocol">协议层（DEX/TVL/LP）</option>
+                                                <option value="capital_cycle">资金循环（CEX↔DEX↔Bridge）</option>
+                                                <option value="token_distribution">代币分布（鲸鱼占比）</option>
+                                                <option value="nft">NFT（蓝筹/地板/扫货）</option>
+                                                <option value="price_relation">价格关联（链上 vs 价格）</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-outline-primary btn-sm"
+                                                id="btn-onchain-apply-template">应用模板</button>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-subgraph-template">子图模板</label>
+                                            <select class="form-select" id="onchain-subgraph-template">
+                                                <option value="">请选择子图模板</option>
+                                                <option value="uniswap_v3_ethereum">Uniswap V3 (ETH)</option>
+                                                <option value="sushiswap_ethereum">SushiSwap (ETH)</option>
+                                                <option value="curve_finance">Curve (ETH)</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-outline-primary btn-sm"
+                                                id="btn-onchain-apply-subgraph">应用子图</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-address-preset">地址池预设</label>
+                                            <select class="form-select" id="onchain-address-preset">
+                                                <option value="">请选择地址池</option>
+                                                <option value="binance">Binance 热钱包</option>
+                                                <option value="okx">OKX 热钱包</option>
+                                                <option value="coinbase">Coinbase 热钱包</option>
+                                                <option value="kraken">Kraken 热钱包</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-address-target">应用到</label>
+                                            <select class="form-select" id="onchain-address-target">
+                                                <option value="behavior">地址行为</option>
+                                                <option value="large">大额异动</option>
+                                                <option value="cycle">资金循环</option>
+                                                <option value="token">代币分布</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-outline-primary btn-sm"
+                                                id="btn-onchain-apply-address">填入地址</button>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">模板仅填充参数与示例，Dune Query ID 需手动填写。</small>
+                                </div>
+                                <!-- 基础参数配置 -->
+                                <div class="section-title">基础参数</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="exchange" class="form-label">交易所</label>
+                                        <select class="form-select" id="exchange">
+                                            <option value="binance">Binance</option>
+                                            <option value="okx">OKX</option>
+                                            <option value="bybit">Bybit</option>
+                                            <option value="kucoin">KuCoin</option>
+                                            <option value="gate">Gate.io</option>
+                                            <option value="huobi">Huobi</option>
+                                            <option value="upbit">Upbit</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="market" class="form-label">市场类型</label>
+                                        <select class="form-select" id="market">
+                                            <option value="spot">现货</option>
+                                            <option value="swap">永续合约</option>
+                                            <option value="future">期货</option>
+                                            <option value="option">期权</option>
+                                            <option value="margin">杠杆交易</option>
+                                            <option value="onchain">链上数据</option>
+                                            <option value="social">社交数据</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="timeframe" class="form-label">时间框架</label>
+                                        <select class="form-select" id="timeframe">
+                                            <option value="1m">1分钟</option>
+                                            <option value="5m">5分钟</option>
+                                            <option value="15m">15分钟</option>
+                                            <option value="30m">30分钟</option>
+                                            <option value="1h">1小时</option>
+                                            <option value="4h">4小时</option>
+                                            <option value="1d" selected>1天</option>
+                                            <option value="1w">1周</option>
+                                            <option value="1M">1月</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary btn-sm mt-2" id="btn-load-timeframes"
+                                            type="button">
+                                            <i class="fas fa-sync"></i> 加载时间框架
+                                        </button>
+                                    </div>
+                                    <div id="spot-data-type-wrap">
+                                        <label for="spot-data-type" class="form-label">现货数据类型</label>
+                                        <select class="form-select" id="spot-data-type">
+                                            <option value="ohlcv" selected>K线（OHLCV）</option>
+                                            <option value="ticker">行情（Ticker）</option>
+                                            <option value="orderbook">订单簿（OrderBook）</option>
+                                            <option value="trades">成交（Trades）</option>
+                                            <option value="market_info">市场信息（Market Info）</option>
+                                            <option value="snapshot">快照（综合）</option>
+                                        </select>
+                                        <small class="text-muted">仅在 market=spot 时生效</small>
+                                    </div>
+
+                                    <div id="option-data-type-wrap" style="display:none;">
+                                        <label for="option-data-type" class="form-label">期权数据类型</label>
+                                        <select class="form-select" id="option-data-type">
+                                            <option value="ohlcv" selected>K线（OHLCV）</option>
+                                            <option value="orderbook">订单簿（OrderBook）</option>
+                                            <option value="trades">成交（Trades）</option>
+                                            <option value="contract_info">合约信息（Contract Info）</option>
+                                            <option value="option_price">期权定价（Option Price）</option>
+                                            <option value="greeks">Greeks（Delta/Gamma/IV等）</option>
+                                            <option value="snapshot">快照（综合）</option>
+                                        </select>
+                                        <small class="text-muted">仅在 market=option 时生效</small>
+                                    </div>
+
+                                    <div id="margin-data-type-wrap" style="display:none;">
+                                        <label for="margin-data-type" class="form-label">杠杆数据类型</label>
+                                        <select class="form-select" id="margin-data-type">
+                                            <option value="ohlcv" selected>K线（OHLCV）</option>
+                                            <option value="ticker">行情（Ticker）</option>
+                                            <option value="orderbook">订单簿（OrderBook）</option>
+                                            <option value="trades">成交（Trades）</option>
+                                            <option value="market_info">市场信息（Market Info）</option>
+                                            <option value="margin_levels">杠杆等级（Margin Levels）</option>
+                                            <option value="borrow_rate">借币利率（Borrow Rate）</option>
+                                            <option value="snapshot">快照（综合）</option>
+                                        </select>
+                                        <small class="text-muted">仅在 market=margin 时生效</small>
+                                    </div>
+
+                                    <div id="deriv-data-type-wrap">
+                                        <label for="deriv-data-type" class="form-label">衍生品数据类型</label>
+                                        <select class="form-select" id="deriv-data-type">
+                                            <option value="ohlcv" selected>K线（OHLCV）</option>
+                                            <option value="ticker">行情（Ticker）</option>
+                                            <option value="orderbook">订单簿（OrderBook）</option>
+                                            <option value="trades">成交（Trades）</option>
+                                            <option value="funding_rate">资金费率（Funding Rate）</option>
+                                            <option value="open_interest">持仓量（Open Interest）</option>
+                                            <option value="mark_price">标记价格（Mark Price）</option>
+                                            <option value="liquidations">强平（Liquidations）</option>
+                                            <option value="contract_info">合约信息（Contract Info）</option>
+                                            <option value="snapshot">快照（综合）</option>
+                                        </select>
+                                        <small class="text-muted">仅在 market=swap / future 时生效</small>
+                                    </div>
+                                </div>
+
+                                <div class="section-title">快捷接口</div>
+                                <div class="info-box">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-box-text">快捷获取 Fetcher 信息 / 市场快照 / 时间区间数据</span>
+                                </div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-info btn-sm" id="btn-fetcher-info" type="button">
+                                                <i class="fas fa-circle-info"></i> Fetcher 信息
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="snapshot-symbol">快照交易对</label>
+                                            <input type="text" class="form-control" id="snapshot-symbol"
+                                                value="BTC/USDT">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="snapshot-timeframe">快照时间框架</label>
+                                            <input type="text" class="form-control" id="snapshot-timeframe" value="1h">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="snapshot-include">快照 include(逗号)</label>
+                                            <input type="text" class="form-control" id="snapshot-include"
+                                                placeholder="ticker,ohlcv,trades">
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-primary btn-sm" id="btn-fetcher-snapshot"
+                                                type="button">
+                                                <i class="fas fa-bolt"></i> 获取快照
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="range-symbol">区间交易对</label>
+                                            <input type="text" class="form-control" id="range-symbol" value="BTC/USDT">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="range-timeframe">区间时间框架</label>
+                                            <input type="text" class="form-control" id="range-timeframe" value="1h">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="range-start">开始时间</label>
+                                            <input type="text" class="form-control" id="range-start"
+                                                placeholder="2025-01-01 00:00:00">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="range-end">结束时间</label>
+                                            <input type="text" class="form-control" id="range-end"
+                                                placeholder="2025-01-31 23:59:59">
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <button class="btn btn-primary btn-sm" id="btn-fetch-range" type="button">
+                                                <i class="fas fa-clock"></i> 按区间获取
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <pre class="bg-light p-2 mt-2 small" id="fetcher-info-result"
+                                        style="max-height:180px; overflow:auto;"></pre>
+                                    <pre class="bg-light p-2 mt-2 small" id="snapshot-result"
+                                        style="max-height:180px; overflow:auto;"></pre>
+                                    <pre class="bg-light p-2 mt-2 small" id="range-result"
+                                        style="max-height:180px; overflow:auto;"></pre>
+                                </div>
+
+                                <!-- 时间范围选择 -->
+                                <div class="section-title">时间范围</div>
+                                <div class="info-box">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-box-text">选择要获取的数据时间范围</span>
+                                </div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label class="form-label">开始时间 (UTC+8) <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="startDateTime"
+                                            placeholder="选择开始日期和时间（年月日时分秒）">
+                                    </div>
+                                    <div>
+                                        <label class="form-label">结束时间 (UTC+8) <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="endDateTime"
+                                            placeholder="选择结束日期和时间（年月日时分秒）">
+                                    </div>
+                                    <div>
+                                        <label for="data-limit" class="form-label">数据限制（条）</label>
+                                        <input type="number" class="form-control" id="data-limit"
+                                            placeholder="空 = 默认(通常1000)" min="1" max="5000">
+                                        <small class="text-muted">留空使用后端默认值（通常 1000），需要限制时填写数字</small>
+                                    </div>
+                                </div>
+
+                                <!-- 交易对/合约选择 -->
+                                <div class="section-title">选择交易对</div>
+                                <div class="info-box">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-box-text">先从接口获取交易对列表，然后进行选择。支持近似匹配搜索。</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="symbol-search-input" class="form-label">搜索交易对（近似匹配）</label>
+                                        <div class="input-group" style="margin-bottom: 1rem;">
+                                            <input type="text" class="form-control" id="symbol-search-input"
+                                                placeholder="输入关键词（如 BTC, USDT, BUSD）">
+                                            <button class="btn btn-primary" id="btn-load-symbols" type="button">
+                                                <i class="fas fa-download"></i> 加载交易对
+                                            </button>
+                                        </div>
+                                        <div id="symbol-list-container"
+                                            style="max-height: 400px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; display: none; background: white;">
+                                        </div>
+                                        <small class="text-muted d-block mt-2" id="symbol-count">点击"加载交易对"按钮获取列表</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="selected-symbols" class="form-label">已选择的交易对</label>
+                                        <div id="selected-symbols" class="selected-items"
+                                            style="min-height: 100px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: #f9fafb;">
+                                        </div>
+                                        <small class="text-muted d-block mt-2">共选择: <strong
+                                                id="selected-count">0</strong> 个交易对</small>
+                                    </div>
+                                </div>
+
+                                <!-- 操作按钮 -->
+                                <div style="margin-top: 2rem;">
+                                    <button class="btn btn-primary" id="btn-fetch-data">
+                                        <i class="fas fa-download"></i> 获取数据
+                                    </button>
+                                    <button class="btn btn-success" id="btn-save-data" style="margin-left: 1rem;">
+                                        <i class="fas fa-save"></i> 保存数据
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="btn-save-cache-local"
+                                        style="margin-left: 1rem;">
+                                        <i class="fas fa-download"></i> 保存缓存到本地
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="btn-import-cache-local"
+                                        style="margin-left: 1rem;">
+                                        <i class="fas fa-upload"></i> 导入本地缓存
+                                    </button>
+                                    <input id="input-import-cache-files" type="file" accept="application/json" multiple
+                                        style="display:none;" />
+                                    <button class="btn btn-warning" id="btn-clear-select" style="margin-left: 1rem;">
+                                        <i class="fas fa-trash"></i> 清除选择
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 数据结果展示 -->
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-table"></i> 获取结果
+                            </div>
+                            <div class="card-body">
+                                <div id="fetch-stats" class="data-stats"></div>
+                                <div class="data-table">
+                                    <table class="table" id="fetch-results-table">
+                                        <div id="fetch-actions" class="mt-2"></div>
+                                        <thead>
+                                            <tr>
+                                                <th>交易对</th>
+                                                <th>时间</th>
+                                                <th>开盘价</th>
+                                                <th>最高价</th>
+                                                <th>最低价</th>
+                                                <th>收盘价</th>
+                                                <th>成交量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="fetch-results-tbody">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted">暂无数据</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标签页 2: 数据分析 -->
+                    <div class="tab-pane fade" id="data-analysis">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-candlestick"></i> 可视化分析
+                            </div>
+                            <div class="card-body">
+                                <div class="info-box" style="margin-bottom: 1.5rem;">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-box-text"><strong>工作流：</strong> ① 选择市场 → ② 加载本地列表 → ③ 多选交易对 → ④
+                                        选择操作</span>
+                                </div>
+
+                                <!-- 控制组 1: 基础设置 -->
+                                <div class="control-group">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-sliders-h"></i> 基础设置
+                                    </div>
+                                    <div class="form-group-row" style="margin-bottom: 1rem;">
+                                        <div>
+                                            <label class="form-label">市场类型</label>
+                                            <select class="form-select" id="analysis-market-select">
+                                                <option value="spot" selected>现货 (Spot)</option>
+                                                <option value="swap">永续合约 (Swap)</option>
+                                                <option value="future">期货 (Future)</option>
+                                                <option value="option">期权 (Option)</option>
+                                                <option value="margin">杠杆交易 (Margin)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label">交易所</label>
+                                            <select class="form-select" id="analysis-exchange-select">
+                                                <option value="binance" selected>Binance</option>
+                                                <option value="okx">OKX</option>
+                                                <option value="bybit">Bybit</option>
+                                            </select>
+                                        </div>
+                                        <div style="display:flex;align-items:flex-end;">
+                                            <button class="btn btn-info btn-sm" id="btn-load-local-data" type="button">
+                                                <i class="fas fa-folder-open"></i> 加载本地列表
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="padding: 0.5rem 1rem; background: #f0f9ff; border-radius: 6px; font-size: 0.85rem; color: #075985;">
+                                        <i class="fas fa-check-circle"></i> <span id="analysis-local-status">尚未加载</span>
+                                    </div>
+                                </div>
+
+                                <!-- 控制组 2: 交易对选择和快速操作 -->
+                                <div class="control-group">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-list-check"></i> 交易对选择（Ctrl/Shift 多选）
+                                    </div>
+                                    <select class="form-select" id="analysis-symbol" multiple size="5"
+                                        style="margin-bottom: 1.5rem; border: 2px solid #e5e7eb;">
+                                        <option value="">请先加载本地列表</option>
+                                    </select>
+                                    <div class="select-actions">
+                                        <button class="btn btn-success btn-sm" id="btn-load-local-selected"
+                                            type="button">
+                                            <i class="fas fa-check"></i> 批量加载
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" id="btn-local-incremental-fetch"
+                                            type="button">
+                                            <i class="fas fa-sync"></i> 增量补齐
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" id="btn-local-export-standard"
+                                            type="button">
+                                            <i class="fas fa-download"></i> 标准化导出
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 控制组 3: 可视化设置 -->
+                                <div class="control-group">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-chart-line"></i> 可视化设置
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label for="analysis-interval" class="form-label">展示周期</label>
+                                            <select class="form-select" id="analysis-interval">
+                                                <option value="raw" selected>原始周期（不聚合）</option>
+                                                <option value="5m">5分钟</option>
+                                                <option value="15m">15分钟</option>
+                                                <option value="30m">30分钟</option>
+                                                <option value="1h">1小时</option>
+                                                <option value="12h">12小时</option>
+                                                <option value="24h">24小时</option>
+                                                <option value="5d">5天</option>
+                                                <option value="7d">7天</option>
+                                                <option value="30d">30天</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="analysis-chart-type" class="form-label">图表类型</label>
+                                            <select class="form-select" id="analysis-chart-type">
+                                                <option value="candlestick" selected>K线</option>
+                                                <option value="line">分时（线图）</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label">联动</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="analysis-sync-depth"
+                                                    checked>
+                                                <label class="form-check-label" for="analysis-sync-depth">联动深度图</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="analysis-signal-strategy" class="form-label">信号策略</label>
+                                            <select class="form-select" id="analysis-signal-strategy">
+                                                <option value="none" selected>不标注</option>
+                                                <option value="sma_cross">SMA20/50 金叉死叉</option>
+                                                <option value="rsi_reversion">RSI 超买超卖</option>
+                                                <option value="kdj_cross">KDJ 金叉死叉</option>
+                                            </select>
+                                        </div>
+                                        <div style="display:flex;align-items:flex-end;gap:0.75rem;">
+                                            <button class="btn btn-primary btn-sm" id="btn-visualize-kline"
+                                                type="button">
+                                                <i class="fas fa-chart-line"></i> 可视化
+                                            </button>
+                                            <button class="btn btn-warning btn-sm" id="btn-indicator-settings"
+                                                type="button">
+                                                <i class="fas fa-sliders"></i> 指标设置
+                                            </button>
+                                            <button class="btn btn-outline-primary btn-sm" id="btn-refresh-depth"
+                                                type="button">
+                                                <i class="fas fa-chart-area"></i> 刷新深度图
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group-compact" style="margin-top: 0.75rem;">
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="raw">原始</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="1m">1m</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="5m">5m</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="15m">15m</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="1h">1h</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="4h">4h</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="1d">1d</button>
+                                        <button class="btn btn-outline-primary btn-sm" data-interval="1w">1w</button>
+                                        <span class="text-muted small"
+                                            style="align-self:center;margin-left:0.5rem;">快捷键：+/- 缩放，0 复位，←/→
+                                            平移，Shift+拖拽 框选</span>
+                                    </div>
+                                </div>
+
+                                <div id="indicator-settings-panel" class="info-box"
+                                    style="display:none; align-items:flex-start; margin-top: 1rem;">
+                                    <i class="fas fa-wrench"></i>
+                                    <div class="info-box-text" style="width:100%;">
+                                        <div class="row g-2">
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-sma20"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-sma20">SMA20</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-sma50"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-sma50">SMA50</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-boll"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-boll">BOLL</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-rsi"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-rsi">RSI</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-takerbuy"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-takerbuy">Taker Buy
+                                                        Ratio</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-ema12"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-ema12">EMA12</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-ema26"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-ema26">EMA26</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-vwap"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-vwap">VWAP</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-macd"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-macd">MACD</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-vwma20"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-vwma20">VWMA20</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-hl2">
+                                                    <label class="form-check-label" for="ind-hl2">HL2</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-signals"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-signals">交易信号</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-kdj"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-kdj">KDJ</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-cci"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-cci">CCI</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-bbwidth"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-bbwidth">BOLL 带宽</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="ind-atr"
+                                                        checked>
+                                                    <label class="form-check-label" for="ind-atr">ATR(14)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 终端视图（券商风格） -->
+                        <div class="card broker-terminal">
+                            <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                <div><i class="fas fa-chart-area"></i> 终端视图</div>
+                                <div class="text-muted small">行情/盘口/交易在同一视图中协同</div>
+                            </div>
+                            <div class="card-body p-2 p-md-3">
+                                <div class="broker-toolbar">
+                                    <div class="broker-toolbar-left">
+                                        <div class="symbol-badge" id="broker-symbol-badge">--</div>
+                                        <div class="kv">
+                                            <div class="kv-label">最新价</div>
+                                            <div class="kv-value" id="broker-last">--</div>
+                                        </div>
+                                        <div class="kv">
+                                            <div class="kv-label">涨跌幅</div>
+                                            <div class="kv-value" id="broker-change">--</div>
+                                        </div>
+                                        <div class="kv">
+                                            <div class="kv-label">成交额</div>
+                                            <div class="kv-value" id="broker-turnover">--</div>
+                                        </div>
+                                    </div>
+                                    <div class="broker-toolbar-right d-flex gap-2">
+                                        <button class="btn btn-sm btn-outline-primary" id="btn-broker-refresh"
+                                            type="button">
+                                            <i class="fas fa-sync"></i> 刷新
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" id="btn-broker-layout"
+                                            type="button">
+                                            <i class="fas fa-th-large"></i> 布局
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="broker-grid">
+                                    <!-- 左侧：自选与资产 -->
+                                    <div class="broker-panel broker-panel-left">
+                                        <div class="broker-panel-header">
+                                            <span>自选/市场</span>
+                                            <span class="text-muted small">快捷列表</span>
+                                        </div>
+                                        <div class="broker-panel-body">
+                                            <input type="text" class="form-control form-control-sm mb-2"
+                                                placeholder="搜索交易对/代码">
+                                            <div class="broker-subtitle">自选列表</div>
+                                            <div class="broker-table">
+                                                <table class="table table-sm table-hover">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>品种</th>
+                                                            <th>最新</th>
+                                                            <th>涨跌%</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>BTC/USDT</td>
+                                                            <td>--</td>
+                                                            <td class="text-muted">--</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ETH/USDT</td>
+                                                            <td>--</td>
+                                                            <td class="text-muted">--</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>BNB/USDT</td>
+                                                            <td>--</td>
+                                                            <td class="text-muted">--</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="broker-subtitle">资产概览</div>
+                                            <div class="data-stats"
+                                                style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                                                <div class="stat-card">
+                                                    <div class="stat-value">--</div>
+                                                    <div class="stat-label">总资产</div>
+                                                </div>
+                                                <div class="stat-card">
+                                                    <div class="stat-value">--</div>
+                                                    <div class="stat-label">可用资金</div>
+                                                </div>
+                                                <div class="stat-card">
+                                                    <div class="stat-value">--</div>
+                                                    <div class="stat-label">当日盈亏</div>
+                                                </div>
+                                                <div class="stat-card">
+                                                    <div class="stat-value">--</div>
+                                                    <div class="stat-label">风险度</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 中央：图表与策略统计 -->
+                                    <div class="broker-panel broker-panel-center">
+                                        <div class="broker-panel-header">
+                                            <span>行情图表</span>
+                                            <span id="analysis-mode-hint" class="text-muted small"></span>
+                                        </div>
+                                        <div class="broker-panel-body">
+                                            <div id="price-chart" class="chart-container" style="height: 500px;"></div>
+                                            <div id="volume-chart" class="chart-container"
+                                                style="height: 200px; margin-top: 1rem;"></div>
+                                            <div id="rsi-chart" class="chart-container"
+                                                style="height: 150px; margin-top: 1rem;"></div>
+                                            <div id="macd-chart" class="chart-container"
+                                                style="height: 160px; margin-top: 1rem;"></div>
+                                            <div id="osc-chart" class="chart-container"
+                                                style="height: 160px; margin-top: 1rem;"></div>
+                                            <div id="volatility-chart" class="chart-container"
+                                                style="height: 140px; margin-top: 1rem;"></div>
+
+                                            <div id="strategy-stats" style="margin-top: 1rem; display:none;">
+                                                <div class="section-title" style="margin-bottom: 0.75rem;">策略统计</div>
+                                                <div class="data-stats"
+                                                    style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-trades">-</div>
+                                                        <div class="stat-label">交易次数</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-winrate">-</div>
+                                                        <div class="stat-label">胜率</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-avg">-</div>
+                                                        <div class="stat-label">单笔均值</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-pnl">-</div>
+                                                        <div class="stat-label">PnL</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-maxdd">-</div>
+                                                        <div class="stat-label">最大回撤</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-pf">-</div>
+                                                        <div class="stat-label">盈亏比</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-ann">-</div>
+                                                        <div class="stat-label">年化</div>
+                                                    </div>
+                                                    <div class="stat-card">
+                                                        <div class="stat-value" id="stat-sharpe">-</div>
+                                                        <div class="stat-label">Sharpe</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-muted small" id="stat-strategy-hint"
+                                                    style="margin-top: 0.5rem;"></div>
+                                            </div>
+
+                                            <div class="chart-container"
+                                                style="margin-top: 1rem; background: #fff; border-radius: 8px; padding: 0.75rem;">
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <div class="text-muted">深度图（Order Book）</div>
+                                                    <div class="text-muted small" id="depth-chart-hint">与当前交易对联动</div>
+                                                </div>
+                                                <canvas id="depth-chart" height="120"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 右侧：盘口/成交/交易 -->
+                                    <div class="broker-panel broker-panel-right">
+                                        <div class="broker-panel-header">
+                                            <span>盘口/成交</span>
+                                            <span class="text-muted small">实时快照</span>
+                                        </div>
+                                        <div class="broker-panel-body">
+                                            <div class="broker-section">
+                                                <div class="broker-subtitle">实时盘口</div>
+                                                <div class="row g-2 align-items-center mb-2">
+                                                    <div class="col-12">
+                                                        <input type="text" id="orderbook-symbol"
+                                                            class="form-control form-control-sm" value="BTC/USDT"
+                                                            list="available-pairs-list" autocomplete="off">
+                                                        <datalist id="available-pairs-list"></datalist>
+                                                    </div>
+                                                    <div
+                                                        class="col-12 d-flex align-items-center justify-content-between">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="auto-refresh-switch">
+                                                            <label class="form-check-label"
+                                                                for="auto-refresh-switch">自动刷新 (2s)</label>
+                                                        </div>
+                                                        <button class="btn btn-sm btn-primary" id="btn-fetch-orderbook"
+                                                            type="button">
+                                                            <i class="fas fa-sync"></i> 刷新盘口
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="text-muted small mb-1">买单 (Bids)</div>
+                                                        <div class="table-responsive"
+                                                            style="max-height: 260px; overflow-y: auto;">
+                                                            <table class="table table-sm table-hover" id="bids-table">
+                                                                <thead class="table-light">
+                                                                    <tr>
+                                                                        <th>价格</th>
+                                                                        <th>数量</th>
+                                                                        <th>总额</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="text-muted small mb-1">卖单 (Asks)</div>
+                                                        <div class="table-responsive"
+                                                            style="max-height: 260px; overflow-y: auto;">
+                                                            <table class="table table-sm table-hover" id="asks-table">
+                                                                <thead class="table-light">
+                                                                    <tr>
+                                                                        <th>价格</th>
+                                                                        <th>数量</th>
+                                                                        <th>总额</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <canvas id="orderbook-chart" height="100"></canvas>
+                                                </div>
+                                            </div>
+
+                                            <div class="broker-section">
+                                                <div class="broker-subtitle">快速下单（预留接口）</div>
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            placeholder="价格">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            placeholder="数量">
+                                                    </div>
+                                                    <div class="col-12 broker-order-actions d-grid gap-2">
+                                                        <button class="btn btn-success btn-sm" type="button">买入</button>
+                                                        <button class="btn btn-danger btn-sm" type="button">卖出</button>
+                                                    </div>
+                                                    <div class="col-12 text-muted small">注：此处仅为界面占位，需对接交易接口。</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 标签页 3: 链上看板 -->
+                    <div class="tab-pane fade" id="onchain-dashboard">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-link"></i> 链上看板（Dune 优先 / Etherscan 回退）
+                            </div>
+                            <div class="card-body">
+                                <div class="section-title">通用参数</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="onchain-network" class="form-label">网络</label>
+                                        <select class="form-select" id="onchain-network">
+                                            <option value="ethereum" selected>Ethereum</option>
+                                            <option value="polygon">Polygon</option>
+                                            <option value="bsc">BSC</option>
+                                            <option value="arbitrum">Arbitrum</option>
+                                            <option value="optimism">Optimism</option>
+                                            <option value="avalanche">Avalanche</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="onchain-chain" class="form-label">链</label>
+                                        <select class="form-select" id="onchain-chain">
+                                            <option value="mainnet" selected>mainnet</option>
+                                            <option value="goerli">goerli</option>
+                                            <option value="mumbai">mumbai</option>
+                                            <option value="testnet">testnet</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex align-items-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="onchain-simulation">
+                                            <label class="form-check-label" for="onchain-simulation">模拟模式</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="section-title">1. 资金流（交易所流入/流出、稳定币流向）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-flow-exchange">交易所</label>
+                                            <select class="form-select" id="onchain-flow-exchange">
+                                                <option value="binance" selected>Binance</option>
+                                                <option value="okx">OKX</option>
+                                                <option value="coinbase">Coinbase</option>
+                                                <option value="kraken">Kraken</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-flow-hours">时间范围（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-flow-hours"
+                                                value="24">
+                                        </div>
+                                        <div class="d-flex align-items-end">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="onchain-flow-stablecoin">
+                                                <label class="form-check-label"
+                                                    for="onchain-flow-stablecoin">稳定币流向</label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-flow-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-flow-dune"
+                                                placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-flow-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-flow-params" rows="2"
+                                                placeholder='{"hours":24}'></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button class="btn btn-primary btn-sm" id="btn-onchain-flow">运行</button>
+                                        <small class="text-muted">未填 Dune Query 将自动回退浏览器 API</small>
+                                    </div>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-flow-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-flow-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-flow-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-flow-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-flow-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-flow-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">2. 地址行为（活跃/新增/留存）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-behavior-hours">窗口（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-behavior-hours"
+                                                value="24">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-behavior-retention">留存窗口（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-behavior-retention"
+                                                value="24">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-behavior-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-behavior-dune"
+                                                placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label"
+                                                for="onchain-behavior-addresses">地址清单（逗号或换行）</label>
+                                            <textarea class="form-control" id="onchain-behavior-addresses" rows="2"
+                                                placeholder="0x...\n0x..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-behavior-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-behavior-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-behavior">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-behavior-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-behavior-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-behavior-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-behavior-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-behavior-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-behavior-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">3. 大额异动（大额转账 / 合约调用集中度）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-large-hours">窗口（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-large-hours"
+                                                value="24">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-large-min">最小金额</label>
+                                            <input type="number" class="form-control" id="onchain-large-min"
+                                                value="100">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-large-token">代币合约（可选）</label>
+                                            <input type="text" class="form-control" id="onchain-large-token"
+                                                placeholder="0x...">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-large-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-large-dune"
+                                                placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div class="d-flex align-items-end">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="onchain-large-contract">
+                                                <label class="form-check-label"
+                                                    for="onchain-large-contract">合约调用集中度</label>
+                                            </div>
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-large-addresses">地址清单（逗号或换行）</label>
+                                            <textarea class="form-control" id="onchain-large-addresses"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-large-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-large-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-large">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-large-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-large-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-large-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-large-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-large-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-large-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">4. 交易结构 / MEV</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-mev-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-mev-dune"
+                                                placeholder="必填推荐">
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-mev-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-mev-params" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-mev">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-mev-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-mev-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-mev-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-mev-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-mev-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-mev-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">5. Gas 维度</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-gas-hours">窗口（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-gas-hours" value="1">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-gas-max-blocks">最大区块数</label>
+                                            <input type="number" class="form-control" id="onchain-gas-max-blocks"
+                                                value="200">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-gas-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-gas-dune"
+                                                placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-gas-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-gas-params" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-gas">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-gas-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-gas-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-gas-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-gas-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-gas-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-gas-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">6. 协议层（DEX 交易量 / TVL / LP 行为）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-protocol-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-protocol-dune"
+                                                placeholder="可选">
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-protocol-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-protocol-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-protocol-subgraph">The Graph
+                                                Subgraph</label>
+                                            <input type="text" class="form-control" id="onchain-protocol-subgraph"
+                                                placeholder="uniswap_v3_ethereum">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-protocol-query">GraphQL Query</label>
+                                            <textarea class="form-control" id="onchain-protocol-query"
+                                                rows="2"></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-protocol-variables">Variables
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-protocol-variables"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-protocol">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-protocol-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-protocol-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-protocol-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-protocol-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-protocol-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-protocol-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">7. 资金循环（CEX ↔ DEX ↔ Bridge）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-cycle-hours">窗口（小时）</label>
+                                            <input type="number" class="form-control" id="onchain-cycle-hours"
+                                                value="24">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-cycle-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-cycle-dune"
+                                                placeholder="可选">
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-cycle-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-cycle-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-cycle-addresses">地址清单（逗号或换行）</label>
+                                            <textarea class="form-control" id="onchain-cycle-addresses"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-cycle">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-cycle-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-cycle-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-cycle-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-cycle-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-cycle-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-cycle-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">8. 代币层（持币集中度 / 鲸鱼占比）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-token-token">代币合约</label>
+                                            <input type="text" class="form-control" id="onchain-token-token"
+                                                placeholder="0x...">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-token-whale">鲸鱼阈值</label>
+                                            <input type="number" class="form-control" id="onchain-token-whale"
+                                                value="100000">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-token-topn">TopN</label>
+                                            <input type="number" class="form-control" id="onchain-token-topn"
+                                                value="10">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-token-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-token-dune"
+                                                placeholder="可选">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-token-addresses">地址清单（逗号或换行）</label>
+                                            <textarea class="form-control" id="onchain-token-addresses"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-token-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-token-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-token">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-token-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-token-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-token-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-token-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-token-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-token-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">9. NFT（蓝筹交易量 / 地板价 / 鲸鱼扫货）</div>
+                                <div class="border rounded p-3 mb-4">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-nft-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-nft-dune"
+                                                placeholder="可选">
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-nft-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-nft-params" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-nft-subgraph">The Graph
+                                                Subgraph</label>
+                                            <input type="text" class="form-control" id="onchain-nft-subgraph"
+                                                placeholder="subgraph name">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-nft-query">GraphQL Query</label>
+                                            <textarea class="form-control" id="onchain-nft-query" rows="2"></textarea>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-nft-variables">Variables
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-nft-variables"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-nft">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-nft-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-nft-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-nft-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-nft-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-nft-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-nft-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+
+                                <div class="section-title">10. 价格关联（链上活动 vs 价格/波动率）</div>
+                                <div class="border rounded p-3">
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-price-dune">Dune Query ID</label>
+                                            <input type="number" class="form-control" id="onchain-price-dune"
+                                                placeholder="必填">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-price-metric">指标列名</label>
+                                            <input type="text" class="form-control" id="onchain-price-metric"
+                                                placeholder="metric_key">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-price-exchange">交易所</label>
+                                            <input type="text" class="form-control" id="onchain-price-exchange"
+                                                value="binance">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-price-symbol">交易对</label>
+                                            <input type="text" class="form-control" id="onchain-price-symbol"
+                                                value="BTC/USDT">
+                                        </div>
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label class="form-label" for="onchain-price-timeframe">时间框架</label>
+                                            <input type="text" class="form-control" id="onchain-price-timeframe"
+                                                value="1h">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="onchain-price-limit">样本条数</label>
+                                            <input type="number" class="form-control" id="onchain-price-limit"
+                                                value="500">
+                                        </div>
+                                        <div style="flex:1">
+                                            <label class="form-label" for="onchain-price-params">Dune Params
+                                                (JSON)</label>
+                                            <textarea class="form-control" id="onchain-price-params"
+                                                rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" id="btn-onchain-price">运行</button>
+                                    <div class="btn-group-compact mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-price-copy">复制JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-price-download">下载JSON</button>
+                                        <button class="btn btn-outline-secondary btn-sm"
+                                            id="btn-onchain-price-csv">导出CSV</button>
+                                    </div>
+                                    <div class="mt-3">
+                                        <canvas id="onchain-price-chart" height="120"></canvas>
+                                    </div>
+                                    <div id="onchain-price-table" class="mt-3"></div>
+                                    <pre class="bg-light p-2 mt-2 small" id="onchain-price-result"
+                                        style="max-height:240px; overflow:auto;"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标签页 3: 数据管理 -->
+                    <div class="tab-pane fade" id="data-manage">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-database"></i> 本地数据索引和管理
+                            </div>
+                            <div class="card-body">
+                                <div class="info-box" style="margin-bottom: 1.5rem;">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span class="info-box-text">扫描 <code
+                                            style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">data_manager_storage/</code>
+                                        目录，展示和管理本地数据。</span>
+                                </div>
+
+                                <!-- 控制组 1: 过滤和刷新 -->
+                                <div class="control-group">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-filter"></i> 过滤数据
+                                    </div>
+                                    <div class="form-group-row">
+                                        <div>
+                                            <label for="manage-market" class="form-label">市场</label>
+                                            <select class="form-select" id="manage-market">
+                                                <option value="">全部</option>
+                                                <option value="spot" selected>现货 (Spot)</option>
+                                                <option value="swap">永续合约</option>
+                                                <option value="future">期货</option>
+                                                <option value="option">期权</option>
+                                                <option value="margin">杠杆交易</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="manage-exchange" class="form-label">交易所</label>
+                                            <select class="form-select" id="manage-exchange">
+                                                <option value="">全部</option>
+                                                <option value="binance" selected>Binance</option>
+                                                <option value="okx">OKX</option>
+                                                <option value="bybit">Bybit</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="manage-timeframe" class="form-label">时间框架</label>
+                                            <select class="form-select" id="manage-timeframe">
+                                                <option value="">全部</option>
+                                                <option value="1m">1分钟</option>
+                                                <option value="5m">5分钟</option>
+                                                <option value="1h">1小时</option>
+                                                <option value="1d">1天</option>
+                                            </select>
+                                        </div>
+                                        <div style="display:flex;align-items:flex-end;">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="local-index-include-range">
+                                                <label class="form-check-label"
+                                                    for="local-index-include-range">包含时间范围</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="select-actions" style="border-top: none;">
+                                        <button class="btn btn-info btn-sm" id="btn-load-local-symbols" type="button">
+                                            <i class="fas fa-folder-open"></i> 从本地加载
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" id="btn-refresh-local-index"
+                                            type="button">
+                                            <i class="fas fa-sync"></i> 刷新索引
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 本地数据索引表 -->
+                                <div class="control-group" style="margin-top: 1.5rem;">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-table"></i> 本地数据索引 <small id="local-index-summary"
+                                            style="font-weight: 400; color: #6b7280; margin-left: 0.5rem;"></small>
+                                    </div>
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                        <label class="form-label mb-0">转换目标格式</label>
+                                        <select class="form-select form-select-sm" id="local-convert-format"
+                                            style="width: 160px;">
+                                            <option value="parquet" selected>Parquet</option>
+                                            <option value="json">JSON</option>
+                                        </select>
+                                        <span class="text-muted small">点击表格中的“转换”即可按此格式转换</span>
+                                    </div>
+                                    <div class="table-wrap">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="font-weight: 600;">市场 / 格式</th>
+                                                    <th style="font-weight: 600;">交易所</th>
+                                                    <th style="font-weight: 600;">交易对</th>
+                                                    <th style="font-weight: 600;">时间框架</th>
+                                                    <th style="font-weight: 600;">时间跨度 (UTC+8)</th>
+                                                    <th style="font-weight: 600;">数据量</th>
+                                                    <th style="font-weight: 600;">完整度</th>
+                                                    <th style="font-weight: 600;">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="local-index-tbody">
+                                                <tr>
+                                                    <td colspan="8" class="text-center text-muted">
+                                                        点击"从本地加载"或"刷新索引"来扫描本地数据</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- 交易对管理 -->
+                                <div class="control-group" style="margin-top: 1.5rem;">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-layer-group"></i> 交易对管理
+                                    </div>
+                                    <label for="manage-symbol-search" class="form-label"
+                                        style="margin-bottom: 0.75rem;">搜索交易对</label>
+                                    <div class="input-group" style="margin-bottom: 1rem;">
+                                        <input type="text" class="form-control" id="manage-symbol-search"
+                                            placeholder="输入关键词（如 BTC, USDT, BUSD）">
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div id="manage-symbol-results"
+                                                style="height: 220px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; display: none; background: #f9fafb;">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div id="manage-selected-symbols" class="selected-items"
+                                                style="min-height: 220px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: #f9fafb;">
+                                            </div>
+                                            <small class="text-muted d-block mt-2">共选择: <strong
+                                                    id="manage-selected-count">0</strong> 个交易对</small>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2 align-items-center mt-2">
+                                        <div class="col-auto">
+                                            <label class="form-label mb-0" for="manage-storage-format">保存格式</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <select class="form-select form-select-sm" id="manage-storage-format"
+                                                style="width: 160px;">
+                                                <option value="parquet" selected>Parquet（推荐）</option>
+                                                <option value="json">JSON</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto text-muted small">仅对 OHLCV 生效，默认使用 Parquet</div>
+                                    </div>
+                                    <div class="select-actions">
+                                        <button class="btn btn-success btn-sm" id="btn-save-to-storage" type="button">
+                                            <i class="fas fa-save"></i> 保存到存储
+                                        </button>
+                                        <button class="btn btn-primary btn-sm" id="btn-export-data" type="button">
+                                            <i class="fas fa-download"></i> 导出数据
+                                        </button>
+                                        <button class="btn btn-outline-warning btn-sm" id="btn-auto-update-to-midnight"
+                                            type="button">
+                                            <i class="fas fa-clock"></i> 自动更新到今日 0 点
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" id="btn-clear-manage" type="button">
+                                            <i class="fas fa-trash"></i> 清除选择
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 交易对分类 -->
+                                <div class="control-group" style="margin-top: 1.5rem;">
+                                    <div class="control-group-title">
+                                        <i class="fas fa-sitemap"></i> 交易对分类（标的 + 交易类型 + 计价资产类型）
+                                    </div>
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                        <button class="btn btn-outline-primary btn-sm" id="btn-classify-symbols"
+                                            type="button">
+                                            <i class="fas fa-layer-group"></i> 生成分类
+                                        </button>
+                                        <span class="text-muted small">示例：BTC-S-USDT/USDC</span>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-lg-8">
+                                            <div class="table-wrap">
+                                                <table class="table table-sm table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="font-weight: 600;">交易对</th>
+                                                            <th style="font-weight: 600;">标的</th>
+                                                            <th style="font-weight: 600;">交易类型</th>
+                                                            <th style="font-weight: 600;">计价资产类型</th>
+                                                            <th style="font-weight: 600;">组ID</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="manage-classify-tbody">
+                                                        <tr>
+                                                            <td colspan="5" class="text-center text-muted">
+                                                                点击“生成分类”后显示结果
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="card bg-light">
+                                                <div class="card-body p-2">
+                                                    <div class="small text-muted mb-1">按组汇总</div>
+                                                    <ul class="small mb-0" id="manage-classify-summary">
+                                                        <li class="text-muted">暂无</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" style="margin-top: 1.5rem;">
+                            <div class="card-header">
+                                <i class="fas fa-list"></i> 存储状态
+                            </div>
+                            <div class="card-body">
+                                <div class="data-table">
+                                    <table class="table" id="storage-status-table">
+                                        <thead>
+                                            <tr>
+                                                <th>市场</th>
+                                                <th>交易所</th>
+                                                <th>交易对数</th>
+                                                <th>数据量</th>
+                                                <th>状态</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="storage-status-tbody">
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">加载中...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标签页 4: 系统日志 -->
+                    <div class="tab-pane fade" id="alphagen">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-robot"></i> AlphaGen 风格因子挖掘（DSL + Mask + RL）
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle"></i> 这里会在后台线程启动训练/导出任务，并可轮询查看状态与日志。
+                                </div>
+
+                                <!-- Data Prep Panel -->
+                                <div class="card bg-light mb-4">
+                                    <div class="card-header border-0 bg-transparent py-2">
+                                        <strong class="text-primary"><i class="fas fa-database"></i> 数据准备（Panel
+                                            生成）</strong>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="section-title" style="margin-top: 1.25rem;">评估单表达式</div>
+
+                                        <!-- Row 1: Exchange & File Selection -->
+                                        <div class="row g-2 align-items-end mb-3">
+                                            <div class="col-md-2">
+                                                <label class="form-label small">Exchange</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="alphagen-spot-exchange" value="binance">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small">Spot Merged Data</label>
+                                                <div class="input-group input-group-sm">
+                                                    <select class="form-select" id="alphagen-merged-select">
+                                                        <option value="">(请先点击右侧 List 加载文件列表)</option>
+                                                    </select>
+                                                    <button class="btn btn-outline-secondary" type="button"
+                                                        id="btn-alphagen-load-files">
+                                                        <i class="fas fa-sync"></i> List
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label small">Max Rows</label>
+                                                <input type="number" class="form-control form-control-sm"
+                                                    id="alphagen-panel-max-rows" value="500000" placeholder="Max Rows">
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-2 align-items-center mb-3">
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-warning btn-sm w-100" type="button"
+                                                    id="btn-alphagen-recommend-panel">
+                                                    <i class="fas fa-magic"></i> 推荐 panel
+                                                </button>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div id="alphagen-merged-stats" class="small text-muted"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Row 2: Metadata Container (Prep) -->
+                                        <div id="dsl-meta-container-prep" class="mb-3" style="display:none;">
+                                            <div class="d-flex gap-2 mb-2">
+                                                <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#meta-cols-collapse-prep">
+                                                    <i class="fas fa-columns"></i> 字段 (<span
+                                                        id="meta-col-count-prep">0</span>)
+                                                </button>
+                                                <button class="btn btn-outline-secondary btn-sm" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#meta-ops-collapse-prep">
+                                                    <i class="fas fa-code"></i> 算子
+                                                </button>
+                                            </div>
+                                            <div class="collapse" id="meta-cols-collapse-prep">
+                                                <div class="card card-body p-2 bg-light small" id="meta-cols-list-prep">
+                                                </div>
+                                            </div>
+                                            <div class="collapse" id="meta-ops-collapse-prep">
+                                                <div class="card card-body p-2 bg-light small" id="meta-ops-list-prep">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Row 3: Action Buttons -->
+                                        <div class="row g-2 mb-2">
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-info btn-sm w-100" type="button"
+                                                    id="btn-alphagen-infer-swap">
+                                                    <i class="fas fa-magic"></i> Auto Infer & Check
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-primary btn-sm w-100" type="button"
+                                                    id="btn-alphagen-build-panel">
+                                                    <i class="fas fa-hammer"></i> Build Panel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="section-title">基础配置</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="alphagen-panel" class="form-label">Panel CSV</label>
+                                        <input type="text" class="form-control" id="alphagen-panel"
+                                            value="alphagen_panel_BTC_USDT_1m_enhanced.csv" />
+                                        <small class="text-muted small">相对路径基于项目根目录；也可填绝对路径</small>
+                                        <div class="d-flex gap-2 mt-2">
+                                            <button class="btn btn-outline-warning btn-sm" type="button"
+                                                id="btn-alphagen-check-panel">
+                                                <i class="fas fa-clipboard-check"></i> Panel 预检
+                                            </button>
+                                        </div>
+                                        <div id="alphagen-panel-stats" class="mt-2"></div>
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-reward-mode" class="form-label">Reward 模式</label>
+                                        <select class="form-select" id="alphagen-reward-mode">
+                                            <option value="ic" selected>IC</option>
+                                            <option value="trade">Trade-Sim</option>
+                                            <option value="hybrid">Hybrid</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-n-folds" class="form-label">Folds</label>
+                                        <input type="number" class="form-control" id="alphagen-n-folds" value="3"
+                                            min="2" max="10" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-embargo-bars" class="form-label">Embargo Bars</label>
+                                        <input type="number" class="form-control" id="alphagen-embargo-bars" value="60"
+                                            min="0" />
+                                    </div>
+                                </div>
+
+                                <div class="section-title">训练</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="alphagen-timesteps" class="form-label">Timesteps</label>
+                                        <input type="number" class="form-control" id="alphagen-timesteps" value="2000"
+                                            min="100" step="100" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-device" class="form-label">Device</label>
+                                        <select class="form-select" id="alphagen-device">
+                                            <option value="cuda" selected>cuda (GPU)</option>
+                                            <option value="cpu">cpu</option>
+                                            <option value="auto">auto</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-max-depth" class="form-label">Max Depth</label>
+                                        <input type="number" class="form-control" id="alphagen-max-depth" value="3"
+                                            min="1" max="6" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-panel-rows" class="form-label">Panel Rows</label>
+                                        <input type="number" class="form-control" id="alphagen-panel-rows" value="8000"
+                                            min="0" step="1000" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-seed" class="form-label">Seed</label>
+                                        <input type="number" class="form-control" id="alphagen-seed" value="7" />
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="alphagen-out" class="form-label">输出模型路径（可选）</label>
+                                        <input type="text" class="form-control" id="alphagen-out"
+                                            placeholder="例如: maskable_ppo_btcusdt_depth3_2000.zip" />
+                                    </div>
+                                    <div class="d-flex align-items-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="alphagen-use-fold-median-ic">
+                                            <label class="form-check-label" for="alphagen-use-fold-median-ic">使用 fold
+                                                中位数 IC 稳健项</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group-compact" style="margin-top: 0.75rem;">
+                                    <button class="btn btn-primary" id="btn-alphagen-train" type="button">
+                                        <i class="fas fa-play"></i> 启动训练
+                                    </button>
+                                    <button class="btn btn-info" id="btn-alphagen-refresh" type="button">
+                                        <i class="fas fa-sync"></i> 刷新任务状态
+                                    </button>
+                                    <button class="btn btn-outline-danger" id="btn-alphagen-cancel" type="button">
+                                        <i class="fas fa-ban"></i> 取消任务
+                                    </button>
+                                </div>
+
+                                <div class="section-title" style="margin-top: 1.25rem;">任务状态</div>
+                                <div class="info-box">
+                                    <div><strong>Job ID:</strong> <span id="alphagen-job-id">-</span></div>
+                                    <div style="margin-top: 0.25rem;"><strong>Status:</strong> <span
+                                            id="alphagen-job-status">-</span></div>
+                                </div>
+                                <div id="alphagen-job-logs"
+                                    style="background: #0b1220; color: #e5e7eb; padding: 1rem; border-radius: 8px; max-height: 260px; overflow-y: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.875rem;">
+                                </div>
+
+                                <!-- Eval Mode Section -->
+                                <div class="row g-2 align-items-center mb-3">
+                                    <div class="col-md-3">
+                                        <label class="form-label small mb-0">评估模式</label>
+                                        <select class="form-select form-select-sm" id="alphagen-eval-mode">
+                                            <option value="single">Single Asset (Timing)</option>
+                                            <option value="multi">Multi Asset (Cross-Sectional)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div id="multi-asset-hint" class="text-info small" style="display:none;">
+                                            <i class="fas fa-info-circle"></i> Multi-Asset 模式下，系统将尝试匹配与选定 Panel 相似的所有文件
+                                            (如 `*_BTC_*.csv` -> `*_*_*.csv`) 进行截面评估。
+                                        </div>
+                                        <div id="alphagen-multi-candidates" class="mt-2"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Metadata Container (Eval) -->
+                                <div id="dsl-meta-container-eval" class="mb-3" style="display:none;">
+                                    <div class="d-flex gap-2 mb-2">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#meta-cols-collapse-eval">
+                                            <i class="fas fa-columns"></i> 字段 (<span id="meta-col-count-eval">0</span>)
+                                        </button>
+                                        <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#meta-ops-collapse-eval">
+                                            <i class="fas fa-code"></i> 算子
+                                        </button>
+                                    </div>
+                                    <div class="collapse" id="meta-cols-collapse-eval">
+                                        <div class="card card-body p-2 bg-light small" id="meta-cols-list-eval"></div>
+                                    </div>
+                                    <div class="collapse" id="meta-ops-collapse-eval">
+                                        <div class="card card-body p-2 bg-light small" id="meta-ops-list-eval"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="alphagen-expr" class="form-label">DSL 表达式</label>
+                                        <textarea class="form-control" id="alphagen-expr" rows="3"
+                                            placeholder="例如: if_else(is_jump(dev,60), neg(dev), zscore(hl_range,60))\n或(Multi-Asset): cs_rank(ts_mean(close, 20))\n或(Single-Asset): ts_rank(zscore(ret_1,60),60)"></textarea>
+                                        <small class="text-muted small">提示：单资产（Single-Asset）主要使用 ts_* 和 Math
+                                            算子；多资产（Multi-Asset）可使用 cs_*（Cross Sectional）算子进行截面排序。rolling 类函数使用离散
+                                            window。</small>
+                                    </div>
+                                </div>
+                                <div class="form-group-row">
+                                    <div class="d-flex align-items-end">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="alphagen-show-breakdown"
+                                                checked>
+                                            <label class="form-check-label"
+                                                for="alphagen-show-breakdown">显示杀分分解（按权重）</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group-compact" style="margin-top: 0.75rem;">
+                                    <button class="btn btn-success" id="btn-alphagen-eval" type="button">
+                                        <i class="fas fa-bolt"></i> 评估
+                                    </button>
+                                </div>
+                                <div id="alphagen-eval-save" class="small text-muted" style="margin-top: 0.75rem;">
+                                </div>
+                                <div id="alphagen-eval-cards" class="row g-2" style="margin-top: 0.5rem;"></div>
+                                <pre id="alphagen-eval-output"
+                                    style="margin-top: 0.75rem; background: #f9fafb; border: 1px solid #e5e7eb; padding: 1rem; border-radius: 8px; max-height: 280px; overflow: auto;"></pre>
+
+                                <div class="section-title" style="margin-top: 1.25rem;">导出 Top-K（从已训练模型采样）</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="alphagen-export-model" class="form-label">模型 .zip</label>
+                                        <input type="text" class="form-control" id="alphagen-export-model"
+                                            value="maskable_ppo_btcusdt_depth2_200.zip" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-export-episodes" class="form-label">Episodes</label>
+                                        <input type="number" class="form-control" id="alphagen-export-episodes"
+                                            value="200" min="10" step="10" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-export-topk" class="form-label">TopK</label>
+                                        <input type="number" class="form-control" id="alphagen-export-topk" value="50"
+                                            min="1" step="1" />
+                                    </div>
+                                    <div>
+                                        <label for="alphagen-export-panel-rows" class="form-label">Panel Rows</label>
+                                        <input type="number" class="form-control" id="alphagen-export-panel-rows"
+                                            value="12000" min="0" step="1000" />
+                                    </div>
+                                </div>
+                                <div class="btn-group-compact" style="margin-top: 0.75rem;">
+                                    <button class="btn btn-warning" id="btn-alphagen-export" type="button">
+                                        <i class="fas fa-file-export"></i> 启动导出
+                                    </button>
+                                    <button class="btn btn-info" id="btn-alphagen-list-exports" type="button">
+                                        <i class="fas fa-list"></i> 列出导出文件
+                                    </button>
+                                </div>
+                                <div id="alphagen-export-files" style="margin-top: 0.75rem;"></div>
+
+                                <div class="section-title" style="margin-top: 1.25rem;">TopK 预览（前 20 条）</div>
+                                <div class="info-box">
+                                    <div><strong>文件:</strong> <span id="alphagen-preview-file">-</span></div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped align-middle"
+                                        id="alphagen-preview-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 120px;">Reward</th>
+                                                <th>Expr</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="alphagen-preview-tbody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="ml-research">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-brain"></i> 机器学习研究配置
+                            </div>
+                            <div class="card-body">
+                                <div class="section-title">基础配置</div>
+                                <div class="form-group-row">
+                                    <div>
+                                        <label for="ml-data-path" class="form-label">Parquet 路径</label>
+                                        <input type="text" class="form-control" id="ml-data-path"
+                                            placeholder="data_manager_storage/spot/binance/BTC_USDT/1h/ohlcv_merged.parquet" />
+                                        <small class="text-muted small">默认使用本地 BTC/USDT 1h parquet</small>
+                                    </div>
+                                    <div>
+                                        <label for="ml-horizon" class="form-label">预测周期</label>
+                                        <select class="form-select" id="ml-horizon">
+                                            <option value="1">t+1h</option>
+                                            <option value="24">t+1d</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="ml-max-rows" class="form-label">最大样本行数</label>
+                                        <input type="number" class="form-control" id="ml-max-rows"
+                                            placeholder="例如 20000" />
+                                        <small class="text-muted small">为空表示使用全量数据</small>
+                                    </div>
+                                    <div>
+                                        <label for="ml-max-runtime" class="form-label">最大运行时长(秒)</label>
+                                        <input type="number" class="form-control" id="ml-max-runtime"
+                                            placeholder="例如 1800" />
+                                        <small class="text-muted small">为空表示不限制</small>
+                                    </div>
+                                </div>
+
+                                <div class="section-title" style="margin-top: 1rem;">实验矩阵</div>
+                                <div class="form-group-row">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-exp-baseline" checked>
+                                        <label class="form-check-label" for="ml-exp-baseline">ML Baseline
+                                            (OLS/Ridge/Lasso/RF/XGBoost/LightGBM)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-exp-pca">
+                                        <label class="form-check-label" for="ml-exp-pca">PCA 版本</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-exp-ic">
+                                        <label class="form-check-label" for="ml-exp-ic">IC_weight 版本</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-exp-lstm">
+                                        <label class="form-check-label" for="ml-exp-lstm">LSTM</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-exp-transformer">
+                                        <label class="form-check-label" for="ml-exp-transformer">Transformer</label>
+                                    </div>
+                                </div>
+
+                                <div class="btn-group-compact" style="margin-top: 0.75rem;">
+                                    <button class="btn btn-success" id="btn-ml-run" type="button">
+                                        <i class="fas fa-play"></i> 运行实验
+                                    </button>
+                                    <button class="btn btn-info" id="btn-ml-refresh" type="button">
+                                        <i class="fas fa-sync"></i> 刷新结果
+                                    </button>
+                                    <button class="btn btn-danger" id="btn-ml-cancel" type="button">
+                                        <i class="fas fa-stop"></i> 取消任务
+                                    </button>
+                                </div>
+
+                                <div class="form-group-row" style="margin-top: 0.75rem;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="ml-quick-mode">
+                                        <label class="form-check-label" for="ml-quick-mode">快速模式（缩短窗口/减少实验）</label>
+                                    </div>
+                                </div>
+
+                                <div class="section-title" style="margin-top: 1.25rem;">任务状态</div>
+                                <div class="info-box">
+                                    <div><strong>Task ID:</strong> <span id="ml-task-id">-</span></div>
+                                    <div style="margin-top: 0.25rem;"><strong>Status:</strong> <span
+                                            id="ml-task-status">-</span></div>
+                                    <div style="margin-top: 0.25rem;"><strong>Error:</strong> <span
+                                            id="ml-task-error">-</span></div>
+                                </div>
+                                <div class="progress" style="height: 18px; margin-top: 0.5rem;">
+                                    <div id="ml-progress" class="progress-bar" role="progressbar" style="width: 0%">0%
+                                    </div>
+                                </div>
+                                <div id="ml-task-logs"
+                                    style="background: #0b1220; color: #e5e7eb; padding: 1rem; border-radius: 8px; max-height: 200px; overflow-y: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 0.875rem;">
+                                </div>
+
+                                <div class="section-title" style="margin-top: 1.25rem;">实验结果</div>
+                                <div id="ml-summary-container" class="table-responsive"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="system-monitor">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-heartbeat"></i> 系统健康状态
+                            </div>
+                            <div class="card-body">
+                                <div class="data-stats">
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="stat-fetchers">0</div>
+                                        <div class="stat-label">活跃Fetcher实例</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="stat-managers">0</div>
+                                        <div class="stat-label">活跃Manager实例</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="stat-version">1.0.0</div>
+                                        <div class="stat-label">系统版本</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value" id="stat-status">
+                                            <i class="fas fa-circle status-indicator online"></i>在线
+                                        </div>
+                                        <div class="stat-label">系统状态</div>
+                                    </div>
+                                </div>
+
+                                <div class="section-title">配置信息</div>
+                                <div class="info-box">
+                                    <div><strong>支持的交易所:</strong> <span id="supported-exchanges"></span></div>
+                                    <div style="margin-top: 0.5rem;"><strong>支持的市场类型:</strong> <span
+                                            id="supported-markets"></span></div>
+                                </div>
+
+                                <button class="btn btn-primary" id="btn-refresh-status" style="margin-top: 1rem;">
+                                    <i class="fas fa-sync"></i> 刷新状态
+                                </button>
+                                <div class="section-title">实时盘口查看</div>
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fas fa-info-circle"></i> 实时盘口已迁移至“市场分析 → 终端视图”，便于与图表/交易同屏联动。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-list-ul"></i> 系统日志
+                            </div>
+                            <div class="card-body">
+                                <div id="system-logs"
+                                    style="background: #f9fafb; padding: 1rem; border-radius: 8px; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 0.875rem;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据体检报告模态框 -->
+    <div class="modal fade" id="integrityModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Large modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-heartbeat text-danger me-2"></i>数据健康体检报告</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="integrityModalBody">
+                    <!-- Content injected here -->
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">正在进行深度扫描，这可能需要几秒钟...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/locale/zh-cn.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.1/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@0.1.1/dist/chartjs-chart-financial.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="/static/app_new.js"></script>
+    <script src="/static/app_extra_orderbook.js"></script>
+</body>
+
+</html>

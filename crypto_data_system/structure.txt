@@ -1,0 +1,30 @@
+crypto_data_system/
+├── __init__.py
+├── main.py                    # 主入口文件
+├── config.py                  # 配置管理
+├── data_models.py            # 数据模型
+├── fetchers/
+│   ├── __init__.py
+│   ├── base_fetcher.py       # 基础获取器
+│   ├── spot_fetcher.py       # 现货
+│   ├── margin_fetcher.py     # 杠杆
+│   ├── swap_fetcher.py       # 永续合约
+│   ├── option_fetcher.py     # 期权
+│   ├── future_fetcher.py     # 期货
+│   ├── onchain_fetcher.py    # 链上数据
+│   └── social_fetcher.py     # 社交媒体
+├── utils/
+│   ├── __init__.py
+│   ├── cache.py              # 缓存管理
+│   ├── date_utils.py         # 日期处理
+│   ├── logger.py             # 日志配置
+│   ├── data_formatter.py     # 数据格式化
+│   └── error_handler and request_utils # 之后做
+├── storage/
+│   ├── __init__.py
+│   ├── data_manager.py       # 数据管理器
+│   └── database.py          # 数据库接口（可选）
+└── examples/
+    ├── run_spot.py          # 现货获取示例
+    ├── run_swap.py          # 永续合约示例
+    └── run_all.py           # 全市场获取示例

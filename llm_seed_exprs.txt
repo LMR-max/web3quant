@@ -1,0 +1,5 @@
+vol_60
+zscore(ts_delta(close, 1), 60)
+ts_rank(decay_linear(open_interest_value, 60), 60)
+ts_rank(decay_linear(funding_rate, 60), 60)
+ts_corr(ts_delta(close, 1), funding_rate, 60)
