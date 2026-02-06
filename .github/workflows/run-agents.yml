@@ -41,6 +41,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: "pip"
+          cache-dependency-path: "requirements-agenthq.txt"
 
       - name: 📦 Install dependencies
         run: |
