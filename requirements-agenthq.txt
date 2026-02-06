@@ -1,0 +1,21 @@
+# Microsoft Agent Framework (pin version to avoid breaking changes)
+agent-framework-core==1.0.0b260107
+agent-framework-azure-ai==1.0.0b260107
+agent-framework-orchestrations
+
+# Agent HTTP Server
+azure-ai-agentserver-core==1.0.0b10
+azure-ai-agentserver-agentframework==1.0.0b10
+
+# Azure OpenAI
+azure-identity
+openai
+
+# Dev tools
+agent-dev-cli
+debugpy
+
+# Utilities
+python-dotenv
+aiohttp
+requests
